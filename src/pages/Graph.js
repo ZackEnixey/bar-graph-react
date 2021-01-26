@@ -16,7 +16,16 @@ export default class Graph extends Component {
         fetch(bookURL).then( bookData => {
             return bookData.text();
         }).then( bookData => {
-            console.log(bookData);
+            const charObj = {};
+            for(const char of bookData){
+                charObj[char] = (charObj[char] || 0) + 1;
+            }
+            console.log(charObj);
+            for(const char in charObj){
+                if(char.charCodeAt() >= 'a'.charCodeAt() && char.charCodeAt() <= 'z'.charCodeAt() ){
+                    console.log(char);
+                }
+            }
             this.setState({ bookContent: bookData} );
         })
     };
