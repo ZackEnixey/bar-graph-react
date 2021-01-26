@@ -19,7 +19,8 @@ export default class Graph extends Component {
         }).then( bookData => {
             const charObj = this.getAllCharacterObject(bookData);
             const charactersAtoZ = this.filterAtoZ(charObj);
-            this.setState({ bookContent: charactersAtoZ} );
+            const sortedAtoZlist = this.sortArrayOfObjectsByName(charactersAtoZ);
+            this.setState({ bookContent: sortedAtoZlist} );
         })
     };
 
@@ -38,10 +39,13 @@ export default class Graph extends Component {
                 charactersAtoZ.push( {"name": char, "value": charObj[char]} );
             }
         }
-        console.log(charactersAtoZ);
         return charactersAtoZ;
     }
 
+    sortArrayOfObjectsByName(arrayOfObjects){
+        arrayOfObjects.sort((a, b) => (a.name > b.name) ? 1 : -1);
+        return arrayOfObjects;
+    }
 
     render(){
         return(
@@ -55,7 +59,6 @@ export default class Graph extends Component {
                     <CartesianGrid stroke="#f5f5f5" />
                     <Line type="monotone" dataKey="value" stroke="#ff7300" yAxisId={0} />
                 </LineChart>
-                graph se ovde vidi
             </div>
         )
     }
