@@ -16,19 +16,25 @@ export default class Graph extends Component {
         fetch(bookURL).then( bookData => {
             return bookData.text();
         }).then( bookData => {
-            const charObj = {};
-            for(const char of bookData){
-                charObj[char] = (charObj[char] || 0) + 1;
-            }
-            console.log(charObj);
+            const charObj = this.getAllCharacterObject(bookData);
+            const charactersAtoZ = {};
             for(const char in charObj){
                 if(char.charCodeAt() >= 'a'.charCodeAt() && char.charCodeAt() <= 'z'.charCodeAt() ){
-                    console.log(char);
+                    charactersAtoZ[char] = charObj[char];
                 }
             }
+            console.log(charactersAtoZ);
             this.setState({ bookContent: bookData} );
         })
     };
+
+    getAllCharacterObject(bookData){
+        const charObj = {};
+        for(const char of bookData){
+            charObj[char] = (charObj[char] || 0) + 1;
+        }
+        return charObj;
+    }
 
 
     render(){
