@@ -1,5 +1,6 @@
-import React, {Component, useEffect} from 'react';
+import React, {Component} from 'react';
 import bookURL from './book.txt';
+import {LineChart, Bar, XAxis, YAxis, Tooltip, Line, CartesianGrid} from 'recharts';
 
 
 
@@ -9,7 +10,7 @@ export default class Graph extends Component {
     constructor(){
         super();
         this.state = {
-            bookContent: "this is initial state"
+            bookContent: [ {"name": "", "value": ""}]
         };
     }
     componentWillMount(){
@@ -17,14 +18,8 @@ export default class Graph extends Component {
             return bookData.text();
         }).then( bookData => {
             const charObj = this.getAllCharacterObject(bookData);
-            const charactersAtoZ = {};
-            for(const char in charObj){
-                if(char.charCodeAt() >= 'a'.charCodeAt() && char.charCodeAt() <= 'z'.charCodeAt() ){
-                    charactersAtoZ[char] = charObj[char];
-                }
-            }
-            console.log(charactersAtoZ);
-            this.setState({ bookContent: bookData} );
+            const charactersAtoZ = this.filterAtoZ(charObj);
+            this.setState({ bookContent: charactersAtoZ} );
         })
     };
 
@@ -36,11 +31,30 @@ export default class Graph extends Component {
         return charObj;
     }
 
+    filterAtoZ(charObj){
+        const charactersAtoZ = [];
+        for(const char in charObj){
+            if(char.charCodeAt() >= 'a'.charCodeAt() && char.charCodeAt() <= 'z'.charCodeAt() ){
+                charactersAtoZ.push( {"name": char, "value": charObj[char]} );
+            }
+        }
+        console.log(charactersAtoZ);
+        return charactersAtoZ;
+    }
+
 
     render(){
         return(
             <div> 
-                <div> {this.state.bookContent} </div>
+                <div> </div>
+                <LineChart width={600} height={400} data={this.state.bookContent} >
+                    <XAxis dataKey="name" />
+                    <YAxis dataKey="value" />
+                    <Tooltip />
+                    <Bar dataKey="value" /> 
+                    <CartesianGrid stroke="#f5f5f5" />
+                    <Line type="monotone" dataKey="value" stroke="#ff7300" yAxisId={0} />
+                </LineChart>
                 graph se ovde vidi
             </div>
         )
